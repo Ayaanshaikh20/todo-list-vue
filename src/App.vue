@@ -9,9 +9,9 @@
       <ul class="todolist" id="todoList">
         <li class="todostask" v-for="(todo, taskindex) in todos" :key="taskindex">
           <p class="para" :id="taskindex" :class="{active: todo.iscompleted}">{{ todo.taskname }}</p>
-          <button class="Edit" @click="editTask(todo.taskname, taskindex)">Edit</button>
-          <button class="delete" @click="removeTask(taskindex)">Remove</button>
-          <button class="completed" @click="completedTask(todo.taskname)" ref="clickvalue">{{ todo.iscompleted ? 'Incompleted' : 'Completed'}}</button>
+            <Edit-button @click="editTask(todo.taskname, taskindex)"></Edit-button>
+            <Remove-button  @click="removeTask(taskindex)"></Remove-button>
+            <Completed-button @click="completedTask(todo.taskname)" ref="clickvalue">{{ todo.iscompleted ? 'Incompleted' : 'Completed'}}</Completed-button>
         </li>
       </ul>
   </div>
@@ -24,7 +24,8 @@ export default {
     return {
       task: '',
       todos: [],
-      isempty: false
+      isempty: false,
+
     }
   },
   methods: {
@@ -52,14 +53,16 @@ export default {
       if(this.todos.length != 0){
         this.task = edittask
         this.todos.splice(index, 1)
-        this.$refs.inputbox.focus()   
+        this.$refs.inputbox.focus()
+        this.currentbtn = 'edit'   
       }else{
         alert('Please add some tasks')
       }  
     },
     removeTask(index) {
       if(this.todos.length != 0){
-        this.todos.splice(index, 1)      
+        this.todos.splice(index, 1)
+        this.currentbtn = 'remove'      
       }else{
         alert('Please add some tasks')
       }  
@@ -67,6 +70,7 @@ export default {
     completedTask(todo) {
       const completedtask = this.todos.find((Todo) => Todo.taskname === todo)
       completedtask.iscompleted = !completedtask.iscompleted
+      this.currentbtn = 'completed'
     }
   }
 }
@@ -167,34 +171,6 @@ body {
 .para {
   flex-grow: 1;
   padding: 2px;
-}
-
-.delete {
-  margin-right: 15px;
-  padding: 2px;
-  background-color: red;
-  color: white;
-  border-color: white;
-  cursor: pointer;
-}
-
-.Edit {
-  margin-right: 2px;
-  padding: 2px;
-  width: 40px;
-  background-color: green;
-  color: white;
-  border-color: white;
-  cursor: pointer;
-}
-
-.completed {
-  margin-left: 15px;
-  padding: 2px;
-  background-color: orange;
-  color: white;
-  border-color: white;
-  cursor: pointer;
 }
 
 .active {
